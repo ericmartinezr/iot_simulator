@@ -35,7 +35,7 @@ def run():
 
 
 if __name__ == "__main__":
-    sleep_time = random.uniform(1.5, 3.0)
+    sleep_time = random.uniform(2.5, 3.0)
     acumulator = random.randint(1, 10)
     acumulator_count = 0
     fake_data = []
