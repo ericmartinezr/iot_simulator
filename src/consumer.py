@@ -1,5 +1,6 @@
 import json
 from kafka import KafkaConsumer
+from datetime import datetime, timezone
 from constants import TOPIC, KAFKA_BROKER
 
 
@@ -14,7 +15,8 @@ def run():
         kafka_consumer.subscribe([TOPIC])
         for msg in kafka_consumer:
             assert isinstance(msg.value, dict)
-            print(msg.value)
+            ts = datetime.fromtimestamp(msg.timestamp / 1000)
+            print(f"Arrival timestamp {ts}")
     except Exception as e:
         print(f"Error: {e}")
     finally:

@@ -2,7 +2,7 @@ import json
 import random
 import time
 from kafka import KafkaProducer
-from randomtimestamp import randomtimestamp
+from datetime import datetime, timezone
 from constants import TOPIC, KAFKA_BROKER
 
 
@@ -17,8 +17,8 @@ def run():
     humidity = random.uniform(30.0, 90.0)
 
     # Timestamp
-    timestamp = randomtimestamp(
-        start_year=2024, end_year=2026, text=True, pattern="%Y-%m-%dT%H:%M:%SZ")
+    timestamp = datetime.now().isoformat()
+    # datetime.now(tz=timezone.utc).isoformat()
 
     # TODO: Loop While True and sleep
     # TODO: Sometimes "sleep" for longer and accumulate data to send in batches, it normally should send one at a time
