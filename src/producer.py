@@ -1,6 +1,11 @@
 import random
 import time
+from kafka import KafkaProducer
 from randomtimestamp import randomtimestamp
+
+# Localhost since this python script runs in local
+KAFKA_BROKER = "localhost:9092"
+TOPIC = "iot-topic"
 
 
 def run():
@@ -39,15 +44,24 @@ if __name__ == "__main__":
     acumulator = random.randint(1, 10)
     acumulator_count = 0
     fake_data = []
-    while True:
 
-        while acumulator_count < acumulator:
-            fake_data.append(run())
-            acumulator_count += 1
+    kafka_producer = KafkaProducer(bootstrap_servers=KAFKA_BROKER)
+    try:
 
-        # TODO: Add send to pub/sub here
-        # send_to_pubsub(fake_data)
+        while True:
 
-        fake_data = []
-        acumulator_count = 0
-        time.sleep(sleep_time)
+            while acumulator_count < acumulator:
+                fake_data.append(run())
+                acumulator_count += 1
+
+            # TODO: Add send to pub/sub here
+            for fdata in fake_data:
+                kafka_producer.send(TOPIC, value=str(fdata).encode("utf-8"))
+
+            fake_data = []
+            acumulator_count = 0
+            time.sleep(sleep_time)
+    except Exception as e:
+        print(f"Error: {e}")
+    finally:
+        kafka_producer.close()
