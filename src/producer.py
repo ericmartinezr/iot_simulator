@@ -1,11 +1,9 @@
+import json
 import random
 import time
 from kafka import KafkaProducer
 from randomtimestamp import randomtimestamp
-
-# Localhost since this python script runs in local
-KAFKA_BROKER = "localhost:9092"
-TOPIC = "iot-topic"
+from constants import TOPIC, KAFKA_BROKER
 
 
 def run():
@@ -24,7 +22,6 @@ def run():
 
     # TODO: Loop While True and sleep
     # TODO: Sometimes "sleep" for longer and accumulate data to send in batches, it normally should send one at a time
-    # TODO: Connect to Pub/Sub and send the data
     # TODO: Add random data with late data (timestamp in the past) to simulate late data arrival
 
     fake_sensor_data = {
@@ -40,12 +37,15 @@ def run():
 
 
 if __name__ == "__main__":
-    sleep_time = random.uniform(2.5, 3.0)
+    sleep_time = 2.5
     acumulator = random.randint(1, 10)
     acumulator_count = 0
     fake_data = []
 
-    kafka_producer = KafkaProducer(bootstrap_servers=KAFKA_BROKER)
+    kafka_producer = KafkaProducer(
+        bootstrap_servers=KAFKA_BROKER,
+        value_serializer=lambda v: json.dumps(v).encode('utf-8'))
+
     try:
 
         while True:
@@ -56,10 +56,11 @@ if __name__ == "__main__":
 
             # TODO: Add send to pub/sub here
             for fdata in fake_data:
-                kafka_producer.send(TOPIC, value=str(fdata).encode("utf-8"))
+                kafka_producer.send(TOPIC, fdata)
 
             fake_data = []
             acumulator_count = 0
+            acumulator = random.randint(1, 10)
             time.sleep(sleep_time)
 
     except Exception as e:

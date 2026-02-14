@@ -24,3 +24,5 @@ docker exec --workdir /opt/kafka/bin/ -it broker sh
 - https://kafka.apache.org/quickstart/
 - https://github.com/dpkp/kafka-python
 - https://hub.docker.com/r/apache/kafka
+- https://beam.apache.org/documentation/basics/#window
+- https://beam.apache.org/documentation/programming-guide/#windowing
