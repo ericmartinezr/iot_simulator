@@ -19,6 +19,22 @@ docker exec --workdir /opt/kafka/bin/ -it broker sh
 ./kafka-console-consumer.sh --bootstrap-server broker:29092 --topics iot-topic --from-beginning
 ```
 
+## Ejecución
+
+```sh
+cd /home/eric/iot_simulator
+source .venv/bin/activate
+
+# WSL - 1
+python src/producer.py
+
+# WSL - 2 (Opcional, solo está para probar la lectura desde Kafka)
+python src/consumer.py
+
+# WSL - 3
+python src/beam_kafka.py
+```
+
 ## Referencia
 
 - https://kafka.apache.org/quickstart/

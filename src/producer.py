@@ -44,6 +44,7 @@ if __name__ == "__main__":
 
     kafka_producer = KafkaProducer(
         bootstrap_servers=KAFKA_BROKER,
+        key_serializer=lambda v: json.dumps(v).encode('utf-8'),
         value_serializer=lambda v: json.dumps(v).encode('utf-8'))
 
     try:

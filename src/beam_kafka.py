@@ -1,6 +1,6 @@
 import logging
 import sys
-
+import json
 import apache_beam as beam
 from apache_beam.io.kafka import ReadFromKafka
 from apache_beam.io.kafka import WriteToKafka
@@ -28,13 +28,16 @@ def run():
             | "Read from Kafka" >> ReadFromKafka(
                 consumer_config={
                     "bootstrap.servers": KAFKA_BROKER,
-                    "group.id": "beam-consumer-group",
                     "auto.offset.reset": "earliest",
 
                 },
                 topics=[TOPIC],
+                # key_deserializer="org.apache.kafka.common.serialization.StringDeserializer",
+                # value_deserializer="org.apache.kafka.common.serialization.StringDeserializer",
+                with_metadata=False
                 # max_num_records=10  # TODO: Remove, for testing only
             )
+            | "To JSON" >> beam.Map(json.loads)
             | "Log" >> beam.Map(print)
         )
 
