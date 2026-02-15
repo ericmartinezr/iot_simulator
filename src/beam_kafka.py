@@ -29,16 +29,18 @@ def run():
                 consumer_config={
                     "bootstrap.servers": KAFKA_BROKER,
                     "auto.offset.reset": "earliest",
+                    "enable.auto.commit": "False"
 
                 },
                 topics=[TOPIC],
                 # key_deserializer="org.apache.kafka.common.serialization.StringDeserializer",
                 # value_deserializer="org.apache.kafka.common.serialization.StringDeserializer",
-                with_metadata=False
-                # max_num_records=10  # TODO: Remove, for testing only
+                with_metadata=False,
+              #  max_num_records=10  # TODO: Remove, for testing only
             )
+            | "Extract Value" >> beam.Values()
             | "To JSON" >> beam.Map(json.loads)
-            | "Log" >> beam.Map(print)
+            | "Log" >> beam.Map(lambda x: print(x, flush=True))
         )
 
         kafka

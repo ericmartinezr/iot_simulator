@@ -62,10 +62,11 @@ if __name__ == "__main__":
             fake_data = []
             acumulator_count = 0
             acumulator = random.randint(1, 10)
+            kafka_producer.flush()
             time.sleep(sleep_time)
 
     except Exception as e:
         print(f"Error: {e}")
     finally:
-        kafka_producer.flush()
+        # kafka_producer.flush()
         kafka_producer.close()
