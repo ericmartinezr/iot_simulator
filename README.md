@@ -16,7 +16,7 @@ docker exec --workdir /opt/kafka/bin/ -it broker sh
 
 # Consumer en consola que viene por defecto con Kafka
 # Permite leer el contenido enviado por el Producer
-./kafka-console-consumer.sh --bootstrap-server broker:29092 --topic iot-topic --from-beginning
+./kafka-console-consumer.sh --bootstrap-server broker:29092 --topics iot-topic --from-beginning
 ```
 
 ## Referencia
@@ -26,3 +26,4 @@ docker exec --workdir /opt/kafka/bin/ -it broker sh
 - https://hub.docker.com/r/apache/kafka
 - https://beam.apache.org/documentation/basics/#window
 - https://beam.apache.org/documentation/programming-guide/#windowing
+- https://beam.apache.org/releases/pydoc/2.69.0/apache_beam.io.kafka.html
