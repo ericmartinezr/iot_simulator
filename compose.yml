@@ -36,5 +36,34 @@ services:
     volumes:
       - grafana_storage:/var/lib/grafana
 
+  jobmanager:
+    image: flink:1.20
+    container_name: jobmanager
+    ports:
+      - "8081:8081"
+    command: jobmanager
+    environment:
+      - |
+        FLINK_PROPERTIES=
+        jobmanager.rpc.address: jobmanager
+        parallelism.default: 1
+
+  taskmanager:
+    build: .
+    user: root
+    container_name: taskmanager
+    depends_on:
+      - jobmanager
+    command: taskmanager
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /tmp:/tmp
+    environment:
+      - |
+        FLINK_PROPERTIES=
+        jobmanager.rpc.address: jobmanager
+        taskmanager.numberOfTaskSlots: 2
+        parallelism.default: 1
+
 volumes:
   grafana_storage: {}
